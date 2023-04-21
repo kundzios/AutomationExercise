@@ -1,9 +1,11 @@
 import pytest
 from playwright.sync_api import Page, expect
+
 from models.home_page import HomePage
 from models.products_page import ProductPage
 from models.cart_page import CartPage
 from models.login_page import LoginPage
+from models.signup_page import SignupPage
 from models.test_cases_page import TestCasesPage
 from models.contact_page import ContactPage
 
