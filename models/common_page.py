@@ -24,6 +24,12 @@ class CommonPage:
     def go_to_contact_page(self):
         self.page.get_by_role("link", name=" Contact us").click()
 
+    def log_out(self):
+        self.page.get_by_role("link", name=" Logout").click()
+
+    def delete_account(self):
+        self.page.get_by_role("link", name=" Delete Account").click()
+
     def subscribe_for_newsletter(self, email):
         self.page.get_by_placeholder("Your email address").fill(email)
         self.page.get_by_role("button", name="").click()
