@@ -6,5 +6,5 @@ class AccountCreatedPage(CommonPage):
         super().__init__(page)
         self.url += "account_created"
 
-    def proceed(self):
+    def proceed_to_homepage(self):
         self.page.get_by_role("link", name="Continue").click()

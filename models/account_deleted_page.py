@@ -6,5 +6,5 @@ class AccountDeletedPage(CommonPage):
         super().__init__(page)
         self.url += "delete_account"
 
-    def proceed(self):
+    def proceed_to_homepage(self):
         self.page.get_by_role("link", name="Continue").click()
