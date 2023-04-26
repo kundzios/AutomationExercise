@@ -9,6 +9,7 @@ class CommonPage:
 
     def navigate(self):
         self.page.goto(self.url)
+        return self
 
     def go_to_home_page(self):
         self.page.get_by_role("link", name=" Home").click()
@@ -37,3 +38,4 @@ class CommonPage:
     def subscribe_for_newsletter(self, email):
         self.page.get_by_placeholder("Your email address").fill(email)
         self.page.get_by_role("button", name="").click()
+        return self
