@@ -1,7 +1,11 @@
+import re
+
+
 class CommonPage:
     def __init__(self, page):
         self.page = page
         self.url = "https://automationexercise.com/"
+        self.locator_logged_in_as = page.get_by_text(re.compile("Logged in as *"))
 
     def navigate(self):
         self.page.goto(self.url)

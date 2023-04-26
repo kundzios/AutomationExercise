@@ -5,6 +5,9 @@ class SignupPage(CommonPage):
     def __init__(self, page):
         super().__init__(page)
         self.url += "signup"
+        self.locator_header = page.get_by_text("Enter Account Information")
+        self.locator_name_input = page.get_by_label("Name *", exact=True)
+        self.locator_email_input = page.get_by_label("Email *")
 
     def sign_up_full(self, customer):
         if (customer.title == "Mr.") | (customer.title == "Mrs."):

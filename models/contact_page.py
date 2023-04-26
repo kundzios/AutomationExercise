@@ -5,6 +5,9 @@ class ContactPage(CommonPage):
     def __init__(self, page):
         super().__init__(page)
         self.url += "contact_us"
+        self.locator_get_in_touch_header = page.get_by_role("heading", name="Get In Touch")
+        self.locator_message_sent_successfully = page.locator("#contact-page")\
+            .get_by_text("Success! Your details have been submitted successfully.")
 
     def send_message(self, name, email, subject, message):
         self.page.get_by_placeholder("Name").fill(name)

@@ -37,18 +37,18 @@ def test_case1_register_user(page: Page):
     check_homepage_visibility(page)
     home_page.go_to_login_page()
     login_page = LoginPage(page)
-    expect(page.get_by_role("heading", name="New User Signup!")).to_be_visible()
+    expect(login_page.locator_signup_header).to_be_visible()
     login_page.sign_up_simple(customer.name, customer.email)
     signup_page = SignupPage(page)
-    expect(page.get_by_text("Enter Account Information")).to_be_visible()
-    expect(page.get_by_label("Name *", exact=True)).to_have_value(customer.name)
-    expect(page.get_by_label("Email *")).to_have_value(customer.email)
+    expect(signup_page.locator_header).to_be_visible()
+    expect(signup_page.locator_name_input).to_have_value(customer.name)
+    expect(signup_page.locator_email_input).to_have_value(customer.email)
     signup_page.sign_up_full(customer)
-    expect(page.get_by_text("Account Created!")).to_be_visible()
     acc_created_page = AccountCreatedPage(page)
+    expect(acc_created_page.locator_header).to_be_visible()
     acc_created_page.proceed_to_homepage()
     check_homepage_visibility(page)
-    expect(page.get_by_text("Logged in as " + customer.name)).to_be_visible()
+    expect(home_page.locator_logged_in_as).to_contain_text(customer.name)
     # skipping the account deletion steps in order to reuse it in the next few test cases
 
 
@@ -58,12 +58,13 @@ def test_case4_logout_user(page: Page):
     check_homepage_visibility(page)
     home_page.go_to_login_page()
     login_page = LoginPage(page)
-    expect(page.get_by_role("heading", name="Login to your account")).to_be_visible()
+    expect(login_page.locator_login_header).to_be_visible()
     login_page.login(customer.email, customer.password)
     check_homepage_visibility(page)
-    expect(page.get_by_text("Logged in as " + customer.name)).to_be_visible()
+    expect(home_page.locator_logged_in_as).to_contain_text(customer.name)
     home_page.log_out()
     expect(page).to_have_url(login_page.url)
+    expect(home_page.locator_logged_in_as).not_to_be_visible()
 
 
 def test_case5_register_user_with_existing_email(page: Page):
@@ -72,9 +73,9 @@ def test_case5_register_user_with_existing_email(page: Page):
     check_homepage_visibility(page)
     home_page.go_to_login_page()
     login_page = LoginPage(page)
-    expect(page.get_by_role("heading", name="New User Signup!")).to_be_visible()
+    expect(login_page.locator_signup_header).to_be_visible()
     login_page.sign_up_simple(customer.name, customer.email)
-    expect(page.get_by_text("Email Address already exist!")).to_be_visible()
+    expect(login_page.locator_already_registered_error).to_be_visible()
 
 
 def test_case3_login_with_incorrect_credentials(page: Page):
@@ -83,9 +84,9 @@ def test_case3_login_with_incorrect_credentials(page: Page):
     check_homepage_visibility(page)
     home_page.go_to_login_page()
     login_page = LoginPage(page)
-    expect(page.get_by_role("heading", name="Login to your account")).to_be_visible()
+    expect(login_page.locator_login_header).to_be_visible()
     login_page.login("a" + customer.email, customer.password)
-    expect(page.get_by_text("Your email or password is incorrect!")).to_be_visible()
+    expect(login_page.locator_wrong_credentials_error).to_be_visible()
 
 
 def test_case2_login_with_correct_credentials(page: Page):
@@ -94,16 +95,16 @@ def test_case2_login_with_correct_credentials(page: Page):
     check_homepage_visibility(page)
     home_page.go_to_login_page()
     login_page = LoginPage(page)
-    expect(page.get_by_role("heading", name="Login to your account")).to_be_visible()
+    expect(login_page.locator_login_header).to_be_visible()
     login_page.login(customer.email, customer.password)
     check_homepage_visibility(page)
-    expect(page.get_by_text("Logged in as " + customer.name)).to_be_visible()
+    expect(home_page.locator_logged_in_as).to_contain_text(customer.name)
     home_page.delete_account()
-    expect(page.get_by_text("Account Deleted!")).to_be_visible()
     acc_deleted_page = AccountDeletedPage(page)
+    expect(acc_deleted_page.locator_header).to_be_visible()
     acc_deleted_page.proceed_to_homepage()
     check_homepage_visibility(page)
-    expect(page.get_by_text("Logged in as " + customer.name)).not_to_be_visible()
+    expect(home_page.locator_logged_in_as).not_to_be_visible()
 
 
 def test_case6_contact_us_form(page: Page):
@@ -113,10 +114,9 @@ def test_case6_contact_us_form(page: Page):
     check_homepage_visibility(page)
     home_page.go_to_contact_page()
     contact_page = ContactPage(page)
-    expect(page.get_by_role("heading", name="Get In Touch")).to_be_visible()
+    expect(contact_page.locator_get_in_touch_header).to_be_visible()
     contact_page.send_message_with_file(customer.name, customer.email, "A cool subject", "A cool message", filepath)
-    expect(page.locator("#contact-page").get_by_text("Success! Your details have been submitted successfully.")).\
-        to_be_visible()
+    expect(contact_page.locator_message_sent_successfully).to_be_visible()
     contact_page.proceed_to_homepage()
     check_homepage_visibility(page)
 
